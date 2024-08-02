@@ -1,0 +1,60 @@
+class Solution {
+public:
+
+    bool dfs(int node, stack<int> &t, vector<vector<int>> &adj, vector<int> &vis){
+        vis[node]=1;
+        bool x=true;   // checkes for cycle   with vis values 0,1,2  
+                       // 0-> unvisited    1-> being traversed   2-> dfs completed
+        for(auto a :adj[node]){
+            if(vis[a]==1){
+                return false;
+               
+            }
+            else if(!vis[a]){
+                x = dfs(a,t,adj,vis);
+                if(!x)return false;
+            }
+           
+        }
+        vis[node]=2;
+        t.push(node);
+        return x;
+
+    }
+
+    vector<int> findOrder(int numCourses, vector<vector<int>>& prerequisites) {
+        
+        stack<int> topo;
+        vector<int> vis(numCourses,0);
+
+        vector<vector<int>> adj(numCourses);    // adjacency list
+        for(auto a: prerequisites){
+            int n = a[0];
+            int m = a[1];
+            adj[m].push_back(n);
+            
+        }
+
+        bool x=true;
+
+        for(int i=0;i<numCourses;i++){
+            
+            if(!vis[i]){
+               x=dfs(i,topo,adj,vis);
+            }
+            if(!x)return {};       // if cycle detected return empty array
+
+        }
+        
+        // if(topo.size()!=numCourses)return {};
+        vector<int> result;
+
+        while(!topo.empty()){
+            result.push_back(topo.top());
+            topo.pop();
+        }
+       // stack will give the topo sorted sequence
+        return result;
+
+    }
+};
