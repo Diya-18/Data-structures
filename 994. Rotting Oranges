@@ -1,0 +1,44 @@
+class Solution {
+public:
+    int orangesRotting(vector<vector<int>>& grid) {
+        int zero=0;
+        int two=0;
+        queue<pair<pair<int,int>,int>> p;    //(x,y),time
+        vector<vector<int>> vis(grid.size(),(vector<int>(grid[0].size(),0)));
+        for(int i=0;i<grid.size();i++){
+            for(int j=0;j<grid[0].size();j++){
+                if(grid[i][j]==2){
+                    p.push({{i,j},0});
+                    vis[i][j]=1;
+                    two++;
+                }
+                else if(grid[i][j]==0)zero++;
+            }
+        }
+        
+
+        int units=0;
+        while(!p.empty()){
+            auto d = p.front();
+            int r = d.first.first;
+            int c = d.first.second;
+            int t = d.second;
+            p.pop();
+
+           // check for all four sourounding sides
+            if(r-1>=0 && grid[r-1][c]==1 && vis[r-1][c]!=1){ p.push({{r-1,c},t+1});two++;vis[r-1][c]=1;}
+            if(r+1<grid.size() && grid[r+1][c]==1 && vis[r+1][c]!=1){p.push({{r+1,c},t+1});two++;vis[r+1][c]=1;}
+            if(c-1>=0 && grid[r][c-1]==1 && vis[r][c-1]!=1){p.push({{r,c-1},t+1});two++;vis[r][c-1]=1;}
+            if(c+1<grid[0].size() && grid[r][c+1]==1 && vis[r][c+1]!=1){p.push({{r,c+1},t+1});two++;vis[r][c+1]=1;}
+
+            units=t;    // store last popped tim
+        }
+
+        int size = grid.size()*grid[0].size();
+        if(size!=zero+two)return -1;
+
+        return units;
+
+
+    }
+};
