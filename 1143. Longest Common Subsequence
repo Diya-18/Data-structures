@@ -1,0 +1,49 @@
+//  Recursive solution
+
+// class Solution {
+// public:
+    
+//     int help(string a, string b, vector<vector<int>> &dp,int i, int j){
+//         if(i<0 || j<0)return 0;
+
+//         // if(dp[i][j]!=-1)return dp[i][j];
+
+//         if(a[i]==b[j])return dp[i][j] = 1+help(a,b,dp,i-1,j-1);
+
+//         return dp[i][j] = max(help(a,b,dp,i-1,j), help(a,b,dp,i,j-1));
+
+//     }
+
+
+//     int longestCommonSubsequence(string text1, string text2) {
+//         int n= text1.size();
+//         int m= text2.size();
+
+//         vector<vector<int>> dp(n,vector<int>(m,-1));
+//         return help(text1, text2, dp,n-1,m-1);
+
+//     }
+// };
+
+
+class Solution {
+public:
+    
+
+    int longestCommonSubsequence(string t, string s) {
+        int n= t.size();
+        int m= s.size();
+
+        vector<vector<int>> dp(n+1,vector<int>(m+1,-1));  // index shift to follow bottom up approach 0 -> n 0 -> m
+
+        for(int i=0;i<=m;i++)dp[0][i]=0;
+        for(int i=0;i<=n;i++)dp[i][0]=0;  // make firts row and first col zero assuming it to be -1th index
+        for(int i=1;i<=n;i++){
+            for(int j=1;j<=m;j++){
+                if(t[i-1]==s[j-1]) dp[i][j] = 1 + dp[i-1][j-1];   // for char match
+                else dp[i][j] = max(dp[i-1][j],dp[i][j-1]);       // for char mismatch
+            }
+        }
+        return dp[n][m];
+    }
+};
