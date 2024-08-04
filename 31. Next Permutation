@@ -1,0 +1,27 @@
+class Solution {
+public:
+    void nextPermutation(vector<int>& nums) {
+        int ind=-1;
+
+        for(int i=nums.size()-1; i>0;i--){
+            if(nums[i]>nums[i-1]){          // find the drop index
+               ind=i;
+               break;
+            }   
+        }
+
+        if(ind==-1)return reverse(nums.begin(),nums.end());
+
+        sort(nums.begin()+ind,nums.end());
+
+
+        for(int i=ind;i<nums.size();i++){
+            if(nums[i]>nums[ind-1]){
+               swap(nums[ind-1],nums[i]);      // find that number which is just graeter than the drop element
+               break;
+            }   
+        }
+
+        
+    }
+};
